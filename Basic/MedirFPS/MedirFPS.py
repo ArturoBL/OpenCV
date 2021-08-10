@@ -1,12 +1,12 @@
 import cv2
 import time
 
-cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+cap = cv2.VideoCapture(0)
 
 #Configuramos captura de video
 cap.set(cv2.CAP_PROP_FRAME_WIDTH,320)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT,240)
-cap.set(cv2.CAP_PROP_FPS, 60)
+cap.set(cv2.CAP_PROP_FPS, 150)
 
 #Obtenemos y mostramos la capacidad de FPS del dispositivo
 fps = cap.get(cv2.CAP_PROP_FPS)
