@@ -3,7 +3,7 @@
 
 int main(int, char**) {
     std::cout << "Starting OpenCV project!\n";
-    auto filename = "c:/temp/lena.jpg";
+    auto filename = "../../../../Media/lena.jpg";
     auto image = cv::imread(filename);
 
     cv::imshow("image",image);
