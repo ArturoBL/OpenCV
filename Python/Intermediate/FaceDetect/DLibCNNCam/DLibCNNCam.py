@@ -20,8 +20,12 @@ def convert_and_trim_bb(image, rect):
 	# return our bounding box coordinates
 	return (startX, startY, w, h)
 
-detector = dlib.cnn_face_detection_model_v1("../../../../Media/mmod_human_face_detector.dat")
+detector = dlib.cnn_face_detection_model_v1("mmod_human_face_detector.dat")
+# detector = dlib.cnn_face_detection_model_v1("../../../../Media/mmod_human_face_detector.dat")
 cap = cv2.VideoCapture(0)
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 898)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 200)
+cap.set(cv2.CAP_PROP_FPS, 120)
 
 while True:
     _, image = cap.read()

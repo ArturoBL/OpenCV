@@ -5,6 +5,9 @@ import cv2
 detector = dlib.get_frontal_face_detector()
 
 cap = cv2.VideoCapture(0)
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 898)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 200)
+cap.set(cv2.CAP_PROP_FPS, 60)
 
 def convert_and_trim_bb(image, rect):
 	# extract the starting and ending (x, y)-coordinates of the

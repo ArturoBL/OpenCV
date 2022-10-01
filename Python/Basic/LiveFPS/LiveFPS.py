@@ -2,8 +2,11 @@ import cv2
 import time
 
 cap = cv2.VideoCapture(0)
-cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1748)
-cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 408)
+# cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1748)
+# cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 408)
+# cap.set(cv2.CAP_PROP_FPS, 120)
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 898)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 200)
 cap.set(cv2.CAP_PROP_FPS, 120)
 pTime = 0
 

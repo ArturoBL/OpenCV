@@ -2,7 +2,9 @@ import cv2
 import numpy as np
 
 cap = cv2.VideoCapture(0)
-
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 898)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 200)
+cap.set(cv2.CAP_PROP_FPS, 60)
 
 net = cv2.dnn.readNetFromCaffe("../../../../Media/deploy.prototxt.txt", "../../../../Media/res10_300x300_ssd_iter_140000.caffemodel")
 
