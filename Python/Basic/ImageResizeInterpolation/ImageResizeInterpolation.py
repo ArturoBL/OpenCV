@@ -3,22 +3,35 @@ import numpy as np
 
 #Leemos la imagen original
 img = cv2.imread('../../../media/lena.jpg')
-imgsize = img.shape
+
+#Obtenemos sus dimensiones y recortamos el array para trabajar con las dimensiones
+#Originalmente es de 3 dimensiones (altura, ancho, canales)
+#El array resultante es de 2 dimensiones (altura, ancho)
+imgsize = img.shape[:2]
 
 #Redimensionamos la imagen a 1/3
-newSize = (imgsize[1]//3, imgsize[0]//3)
+newSize = (imgsize[0]//3, imgsize[1]//3)
 resized_image = cv2.resize(img, newSize)
 
-#Calculamos el tamaño de la imagen redimensionada
-newsize = resized_image.shape
-fullsize = (newSize[1]*3, newSize[0]*3) 
-
 #Realizamos las interpolaciones
-imglanczos = cv2.resize(resized_image, fullsize, interpolation=cv2.INTER_LANCZOS4)
-imgnearest = cv2.resize(resized_image, fullsize, interpolation=cv2.INTER_NEAREST)
-imgbilinear = cv2.resize(resized_image, fullsize, interpolation=cv2.INTER_LINEAR)
-imgbicubic = cv2.resize(resized_image, fullsize, interpolation=cv2.INTER_CUBIC)
-imgarea = cv2.resize(resized_image, fullsize, interpolation=cv2.INTER_AREA)
+'''
+enum  	cv::InterpolationFlags {
+  cv::INTER_NEAREST = 0,
+  cv::INTER_LINEAR = 1,
+  cv::INTER_CUBIC = 2,
+  cv::INTER_AREA = 3,
+  cv::INTER_LANCZOS4 = 4,
+  cv::INTER_LINEAR_EXACT = 5,
+  cv::INTER_NEAREST_EXACT = 6,
+  cv::INTER_MAX = 7,
+  cv::WARP_FILL_OUTLIERS = 8,
+  cv::WARP_INVERSE_MAP = 16
+}'''
+imglanczos = cv2.resize(resized_image, imgsize, interpolation=cv2.INTER_LANCZOS4)
+imgnearest = cv2.resize(resized_image, imgsize, interpolation=cv2.INTER_NEAREST)
+imgbilinear = cv2.resize(resized_image, imgsize, interpolation=cv2.INTER_LINEAR)
+imgbicubic = cv2.resize(resized_image, imgsize, interpolation=cv2.INTER_CUBIC)
+imgarea = cv2.resize(resized_image, imgsize, interpolation=cv2.INTER_AREA)
 
 #Mostramos la imagen original
 cv2.imshow('Original',img)
