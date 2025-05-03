@@ -8,6 +8,10 @@ cap = cv2.VideoCapture(0)
 #cap.set(cv2.CAP_PROP_FPS, 70)
 
 net = cv2.dnn.readNetFromCaffe("../../../../Media/deploy.prototxt.txt", "../../../../Media/res10_300x300_ssd_iter_140000.caffemodel")
+net.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
+net.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
+# Selecciona la GPU (por ejemplo, la 1)
+cv2.cuda.setDevice(1)
 
 while True:
     _, image = cap.read()
