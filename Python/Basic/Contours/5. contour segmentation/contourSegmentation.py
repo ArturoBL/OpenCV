@@ -43,7 +43,7 @@ print("Contour solid area: ", mxa - ha)
 
 height, width, _ = image.shape
 mask = np.zeros((height, width, 3), np.uint8)
-cv2.fillPoly(mask, pts =[contours[mxi]], color=(0,0,255))   #Contour in red
+cv2.fillPoly(mask, pts =[c], color=(0,0,255))   #Contour in red
 cv2.fillPoly(mask, pts =childs, color=(0,0,0))   #Holes in green
 
 segmentation = cv2.bitwise_or(image,mask)
