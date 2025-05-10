@@ -7,6 +7,12 @@ ret, thresh = cv2.threshold(gray, 150, 255, cv2.THRESH_BINARY)
 contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 print("Contours: ",hierarchy.shape[1])
 print("Hierarchy: [Next, Previous, First_Child, Parent]")
+'''
+Next: Next contour index in the same hierarchy level
+Previous: Index of the contour in the previous hierarchy level
+First_Child: Index of the first child contour in the current hierarchy level
+Parent: Index of the parent contour in the current hierarchy level
+'''
 print(hierarchy)
 
 for i, contour in enumerate(contours):
