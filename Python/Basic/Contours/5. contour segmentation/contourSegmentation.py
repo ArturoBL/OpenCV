@@ -15,14 +15,9 @@ ret, thresh = cv2.threshold(gray, 150, 255, cv2.THRESH_BINARY)
 contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 
 #Find the biggest contour area
-mxi = 0     
-mxa = cv2.contourArea(contours[0])     
-for i, contour in enumerate(contours):    
-    area = cv2.contourArea(contour)
-    if area > mxa:
-        mxi = i         #index
-        mxa = area      #area
-
+c = max(contours, key=cv2.contourArea)
+mxa = cv2.contourArea(c)
+mxi = contours.index(c)
 print("Biggest area: ", mxa)
 
 #Find the child contours correspondig to holes in the biggest contour
@@ -38,19 +33,19 @@ for i, h in enumerate(hierarchy[0]):
         
         ha += cha
         print("Child area: ", cha)
-        childs.append(i)        
+        childs.append(contours[i])        
 
 print("Number of holes: ", len(childs))        
-print(childs)
+
 print("Total holes area: ", ha)
 print("Contour solid area: ", mxa - ha)
+
 
 height, width, _ = image.shape
 mask = np.zeros((height, width, 3), np.uint8)
 cv2.fillPoly(mask, pts =[contours[mxi]], color=(0,0,255))   #Contour in red
-cv2.fillPoly(mask, pts =[contours[i] for i in childs], color=(0,0,0))   #Holes in black
+cv2.fillPoly(mask, pts =childs, color=(0,0,0))   #Holes in green
 
-#Mark the biggest contour in red
 segmentation = cv2.bitwise_or(image,mask)
 
 cv2.imshow('image', image)
