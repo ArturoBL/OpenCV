@@ -2,73 +2,86 @@ import triangle
 import matplotlib.pyplot as plt
 import cv2
 
+# Read image
 
+#image = cv2.imread('../../../../Media/contourrect.png')
+#image = cv2.imread('../../../../Media/asimetric.png')
+image = cv2.imread('../../../../Media/10002EM.png')
 
-image = cv2.imread('../../../../Media/contourrect.png')
+image = (255-image)    #Invert when black background
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 ret, thresh = cv2.threshold(gray, 150, 255, cv2.THRESH_BINARY)
+
+# Find contours
 contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 
-c = max(contours, key=cv2.contourArea)
+c = max(contours, key=cv2.contourArea)  # Max area contour
+mxa = cv2.contourArea(c)
 index = contours.index(c)
-approx = cv2.approxPolyDP(c, 0.001 * cv2.arcLength(c, True), True)
+
+#epsilon=0.0001      # Lower value = more accurate, more vertices
+epsilon=0.0008      # Lower value = more accurate, more vertices
+#Reduce number of vertices
+approx = cv2.approxPolyDP(c, epsilon * cv2.arcLength(c, True), True)
 ctm = approx.reshape(-1, 2)
-for (x, y) in ctm:
-    cv2.circle(image, (x, y), 1, (0, 0, 255), 3)
+cxy = [[x, y] for x, y in ctm]  # Convert array to list
+seg = [[i, (i + 1) % len(cxy)] for i in range(len(cxy))]    # Create segments
 
-print("Contour")
-print(ctm)
 
-#find holes
-holes = list()
+holes = list()  # List of hole vertices
+holesct = list()    # List of hole centroids
+segh = list()
+vertx = cxy
+#find child contours
 for i, h in enumerate(hierarchy[0]):
+    
     if h[3] == index:
-        print(i, h)
-        ac = cv2.approxPolyDP(contours[i], 0.001 * cv2.arcLength(contours[i], True), True)
-        hole = ac.reshape(-1, 2)
-        for (x, y) in hole:
-            cv2.circle(image, (x, y), 1, (0, 255, 0), 3)
-        holes.append(hole)
+        cha = cv2.contourArea(contours[i])
+        if cha/mxa < 0.01:
+            continue    # Skip small contours
+        cp = cv2.approxPolyDP(contours[i], epsilon * cv2.arcLength(contours[i], True), True)
+        cp = cp.reshape(-1, 2)
+        
+        hxy = [[x, y] for x, y in cp]   # Convert array to list        
+                
+        segh = [[i+len(vertx), (i + 1) % len(hxy) + len(vertx)] for i in range(len(hxy))]
+        vertx = vertx + hxy
+        
+        holes = holes + hxy
+        
+        #segh = [[i+len(cxy), (i + 1) % len(hxy) + len(cxy)] for i in range(len(hxy))]
+        seg = seg + segh
+        M = cv2.moments(contours[i])
+        hcx = M["m10"] / M["m00"]
+        hcy = M['m01'] / M['m00']
+        cv2.circle(image, (int(hcx), int(hcy)), 3, (0, 0, 255), -1)
+        holesct = holesct + [[int(hcx), int(hcy)]]    # Add hole centroid to list                   
 
-print("Holes")
-print(len(holes))
-print(holes)
+for x, y in vertx:
+    cv2.circle(image, (x, y), 3, (0, 255, 0), -1)
 
+#print("vertx",vertx)
+#print("seg",seg)
+#print("holesct",holesct)
 
-
-
-# Polígono exterior
-outer = [[0, 0], [5, 0], [5, 5], [0, 5]]
-# Hoyo interior (en sentido horario)
-hole = [[2, 2], [3, 2], [3, 3], [2, 3]]
-
-# Construcción de estructura de entrada
-vertices = outer + hole
-print("Vertices")
-print(vertices)
-segments = [[i, (i + 1) % len(outer)] for i in range(len(outer))] + \
-           [[i + len(outer), ((i + 1) % len(hole)) + len(outer)] for i in range(len(hole))]
-
-print("Segments")
-print(segments)
 
 A = {
-    'vertices': vertices,
-    'segments': segments,
-    'holes': [[2.5, 2.5]]  # Un punto dentro del hoyo
+    'vertices': vertx,
+    'segments': seg,
+    'holes': holesct
 }
+#B = triangle.triangulate(A)  # Delaunay triangulation
+B = triangle.triangulate(A, 'p')  # 'p' = PSLG (planar straight line graph)    
+#B = triangle.triangulate(A, 'pc')  # 'pc' = PSLG with constrained Delaunay
+#B = triangle.triangulate(A, 'pq10')  # 'pq10' = PSLG with quality = 10
+#B = triangle.triangulate(A, 'pq0D')  # 'pq0D' = PSLG with quality = 0 and Delaunay
 
-# Triangulación
-B = triangle.triangulate(A, 'p')  # 'p' = PSLG (planar straight line graph)
-
-#print(B)
-
-# Visualización
 triangle.compare(plt, A, B)
 
-#plt.show()
-
-
 cv2.imshow('image', image)
+plt.gca().invert_yaxis()
+plt.show()
+
+
 cv2.waitKey(0)
 cv2.destroyAllWindows()
