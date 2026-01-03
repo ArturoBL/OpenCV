@@ -27,8 +27,8 @@ ARUCO_DICT = {
 }
 
 
-aruco_type = "DICT_7X7_1000"
-id_marker = 25
+aruco_type = "DICT_5X5_50"
+id_marker = 4
 size = 200  # pixeles
 arucodict = aruco.getPredefinedDictionary(aruco.DICT_4X4_50)
 MarkerImg = aruco.generateImageMarker(arucodict, id_marker, size)
