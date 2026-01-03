@@ -3,7 +3,10 @@ import numpy as np
 
 
 # 1. Define the dictionary of markers to use
-dictionary = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_250)
+# DICT_6X6_250 for multimarkers.png
+#DICT_4X4_250 for aruco_0.png
+#dictionary = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_250)
+dictionary = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_6X6_250)
 
 # 2. Define detection parameters (using defaults here)
 parameters = cv2.aruco.DetectorParameters()
@@ -12,7 +15,7 @@ parameters = cv2.aruco.DetectorParameters()
 detector = cv2.aruco.ArucoDetector(dictionary, parameters)
 
 # 4. Read image
-image = cv2.imread('aruco_0.png')
+image = cv2.imread('6x6_250_markers.png')
 
 # 5. Detect the markers
 markerCorners, markerIds, rejectedCandidates = detector.detectMarkers(image)
