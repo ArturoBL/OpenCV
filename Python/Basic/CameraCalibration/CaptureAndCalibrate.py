@@ -1,5 +1,6 @@
 import cv2
 import pickle
+import numpy as np
 
 cap = cv2.VideoCapture(0,cv2.CAP_DSHOW)     # Device Initialization with directshow
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
