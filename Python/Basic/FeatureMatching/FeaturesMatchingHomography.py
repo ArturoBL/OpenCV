@@ -4,7 +4,7 @@ from matplotlib import pyplot as plt
 
 MIN_MATCH_COUNT = 10
 
-filebox = '..\..\..\Media\\box.png'
+filebox = '..\..\..\Media\\box2.png'
 fileboxscene = '..\..\..\Media\\box_in_scene.png'
 img1 = cv.imread(filebox, cv.IMREAD_GRAYSCALE)          # queryImage
 img2 = cv.imread(fileboxscene, cv.IMREAD_GRAYSCALE) # trainImage

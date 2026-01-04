@@ -2,7 +2,7 @@ import numpy as np
 import cv2 as cv
 import matplotlib.pyplot as plt
 
-filebox = '..\..\..\Media\\box.png'
+filebox = '..\..\..\Media\\box2.png'
 fileboxscene = '..\..\..\Media\\box_in_scene.png'
 
 
